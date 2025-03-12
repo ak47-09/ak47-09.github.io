@@ -14,6 +14,7 @@ function startGame() {
     displayGame();
 }
 
+
 function createDeck() {
     let deck = [];
     for (let suit of suits) {
