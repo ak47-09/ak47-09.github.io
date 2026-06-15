@@ -9,10 +9,15 @@ varying vec3 normal;
 varying vec4 glColor;
 
 void main() {
-    vec4 texColor = texture(tex, texCoord) * glColor;
+    vec4 texColor = texture(tex, texCoord);
     
-    if(texColor.a < 0.1) discard;
+    // Apply vertex color
+    texColor *= glColor;
     
+    // Discard fully transparent pixels
+    if(texColor.a < 0.001) discard;
+    
+    // Apply lightmap
     vec3 lightCol = texture(lightmap, lmCoord).rgb;
     texColor.rgb *= lightCol;
     

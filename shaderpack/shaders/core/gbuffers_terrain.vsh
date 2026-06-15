@@ -9,7 +9,8 @@ void main() {
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     
     texCoord = gl_MultiTexCoord0.st;
-    lmCoord = gl_MultiTexCoord1.st / 16.0;
+    // Properly normalize lightmap coordinates for Minecraft's 16x16 lightmap
+    lmCoord = gl_MultiTexCoord1.st / 256.0;
     
     normal = normalize(gl_NormalMatrix * gl_Normal);
     glColor = gl_Color;

@@ -9,21 +9,20 @@ varying vec3 normal;
 varying vec4 glColor;
 
 void main() {
-    vec4 texColor = texture(tex, texCoord) * glColor;
+    vec4 texColor = texture(tex, texCoord);
     
-    // Discard transparent pixels
-    if(texColor.a < 0.1) discard;
+    // Apply vertex color (important for block tinting)
+    texColor *= glColor;
     
-    // Apply lightmap with enhanced warm tones
+    // Discard fully transparent pixels
+    if(texColor.a < 0.001) discard;
+    
+    // Apply lightmap - critical for terrain lighting
     vec3 lightCol = texture(lightmap, lmCoord).rgb;
     texColor.rgb *= lightCol;
     
-    // Warm color cast for aesthetic
-    texColor.rgb += vec3(0.015, 0.005, -0.01) * lightCol.y;
-    
-    // Subtle ambient occlusion approximation
-    float ao = mix(0.9, 1.0, dot(normal, vec3(0.577)));
-    texColor.rgb *= ao;
+    // Enhance warm tones in lighting
+    texColor.rgb += vec3(0.02, 0.01, 0.0) * lightCol.y;
     
     gl_FragData[0] = texColor;
     gl_FragData[1] = vec4(normal * 0.5 + 0.5, 1.0);
